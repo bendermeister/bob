@@ -16,8 +16,13 @@
 * TODO DB
 - should map a source file to a unique object file and its compilation flags
 
-* TODO Config File
-- TODO: figure out what format to use and what it needs to be able to do
+* TODO Config TOML File
+** TODO get TOML parser working
+** TODO Define Needed Capability
+- have a way to execute scripts
+- define trees of data
+- define flags in association with this data
+- define libs to link with after the compilation
 
 * TODO wrap clang
 * TODO wrap git
