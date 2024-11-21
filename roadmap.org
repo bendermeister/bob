@@ -1,8 +1,23 @@
 #+title: Roadmap
-* Flags
-- init
-- sync
-- resync
-- build
-- test
-- clear
+* TODO Flags
+- *init*
+  produce emtpy module
+- *sync*
+  download all external modules and compile them
+- *resync*
+  delete all external modules and sync
+- *build*
+  build the current module
+- *test*
+  build the current tests for the module
+- *clear*
+  delte build directory
+
+* TODO DB
+- should map a source file to a unique object file and its compilation flags
+
+* TODO Config File
+- TODO: figure out what format to use and what it needs to be able to do
+
+* TODO wrap clang
+* TODO wrap git
