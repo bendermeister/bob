@@ -1,0 +1,32 @@
+# General, there may only be one; the general is the main build every build inherits from general
+ProjectName = "hello"
+MainBuild = "debug"
+
+# FlagGroups, have a name and can reference other Flag groups
+[[FlagGroup]]
+Name = "general"
+Flags = ["-Wall", "-Wextra", "-std=c99"]
+
+[[FlagGroup]]
+Name = "debug"
+Flags = ["-g"]
+FlagGroups = ["general"]
+
+# Builds have a name and can reference other builds from that, inehert values from referenced build
+[[Build]]
+Name = "general"
+Type = "exe"
+Target = "hello.out"
+FlagGroup = "general"
+
+[[Build]]
+Name = "debug"
+Build = "general"
+FlagGroup = "debug"
+
+[[Source]]
+Path = "main.c"
+Flags = ["-DEEZNUTS=1"]
+
+[[Source]]
+Path = "*.c"
