@@ -2,6 +2,7 @@ package parser
 
 import (
 	"bob/build"
+	"bob/flag"
 	"fmt"
 	"os"
 
@@ -30,24 +31,25 @@ func (k *Kind) UnmarshalText(text []byte) error {
 }
 
 type FlagGroup struct {
-	Name       string   `toml:"Name"`
-	Flags      []string `toml:"Flags"`
-	FlagGroup  string   `toml:"FlagGroup"`
-	FlagGroups []string `toml:"FlagGroups"`
+	Name       string        `toml:"Name"`
+	Flags      []flag.Single `toml:"Flags"`
+	FlagGroup  string        `toml:"FlagGroup"`
+	FlagGroups []string      `toml:"FlagGroups"`
 }
 
 type Build struct {
-	Name       string   `toml:"Name"`
-	Kind       Kind     `toml:"Type"`
-	FlagGroups []string `toml:"FlagGroups"`
-	Target     string   `toml:"Target"`
-	FlagGroup  string   `toml:"FlagGroup"`
-	Build      string   `toml:"Build"`
+	Name       string        `toml:"Name"`
+	Kind       Kind          `toml:"Type"`
+	FlagGroups []string      `toml:"FlagGroups"`
+	Flags      []flag.Single `toml:"FlagGroups"`
+	Target     string        `toml:"Target"`
+	FlagGroup  string        `toml:"FlagGroup"`
+	Build      string        `toml:"Build"`
 }
 
 type Source struct {
-	Path  string   `toml:"Path"`
-	Flags []string `toml:"Flags"`
+	Path  string        `toml:"Path"`
+	Flags []flag.Single `toml:"Flags"`
 }
 
 type Config struct {
@@ -58,18 +60,16 @@ type Config struct {
 	Sources     []Source    `toml:"Source"`
 }
 
-func Run(path string) (Config, error) {
+func ParseText(text string) (Config, error) {
 	var config Config
+	_, err := toml.Decode(string(text), &config)
+	return config, err
+}
 
+func ParseFile(path string) (Config, error) {
 	text, err := os.ReadFile(path)
 	if err != nil {
-		return config, err
+		return Config{}, err
 	}
-
-	_, err = toml.Decode(string(text), &config)
-	if err != nil {
-		return config, err
-	}
-
-	return config, nil
+	return ParseText(string(text))
 }
