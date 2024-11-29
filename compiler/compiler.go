@@ -1,9 +1,6 @@
 package compiler
 
-type FlagSet struct{}
-type Flag struct{}
-type Object struct{}
-type Target struct{}
+type Build struct{}
 
 type Compiler interface {
 	Compile(path string, flag string, object string) error

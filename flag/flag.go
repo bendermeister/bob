@@ -1,30 +1,16 @@
 package flag
 
-import "strings"
-
-// TODO: how to deal with arguments
-type Single struct {
-	body string
-}
-
-func (s *Single) UnmarshalText(text []byte) error {
-	s.body = string(text)
-	s.body = strings.TrimSpace(s.body)
-	// TODO check if this is a real flag
-	return nil
-}
-
-func (s Single) String() string {
-	return s.body
-}
+import (
+	"strings"
+)
 
 type Set struct {
-	body []Single
+	body []string
 }
 
-func (m *Set) Insert(s Single) error {
+func (m *Set) Insert(s string) error {
 	if m.body == nil {
-		m.body = make([]Single, 0)
+		m.body = make([]string, 0)
 	}
 	m.body = append(m.body, s)
 	return nil
@@ -33,7 +19,7 @@ func (m *Set) Insert(s Single) error {
 func (m *Set) String() string {
 	set := make(map[string]bool)
 	for _, f := range m.body {
-		set[f.String()] = true
+		set[f] = true
 	}
 
 	str := ""
