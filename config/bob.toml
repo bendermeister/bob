@@ -25,7 +25,7 @@ Type = "exe"
 Target = "hello.out"
 FlagGroup = "general"
 
-[[Build]
+[[Build]]
 Name = "debug"
 Build = "general"
 FlagGroup = "debug"
@@ -43,14 +43,3 @@ Flags = ["-DEEZNUTS=1"]
 
 [[Source]]
 Path = "*.c"
-
-[[Test]]
-Execute = "./"
-
-[[Dependency]]
-Source = "<link>@commit0"
-Name = commit0
-
-[[Dependency]]
-Source = "<link>@commit1"
-Name = commit1

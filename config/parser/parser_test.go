@@ -1,7 +1,7 @@
-package parser
+package parser_test
 
 import (
-	"fmt"
+	"bob/config/parser"
 	"slices"
 	"testing"
 )
@@ -25,22 +25,22 @@ func (v *Validator) Init() {
 
 func TestRun(t *testing.T) {
 	path := "../bob.toml"
-	config, err := Run(path)
+	config, err := parser.ParseFile(path)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	flagGroups := make(map[string]FlagGroup)
+	flagGroups := make(map[string]parser.FlagGroup)
 	for _, fg := range config.FlagGroups {
 		flagGroups[fg.Name] = fg
 	}
 
-	builds := make(map[string]Build)
+	builds := make(map[string]parser.Build)
 	for _, b := range config.Builds {
 		builds[b.Name] = b
 	}
 
-	var fg FlagGroup
+	var fg parser.FlagGroup
 
 	v := new(Validator)
 
@@ -48,7 +48,9 @@ func TestRun(t *testing.T) {
 	fg = flagGroups["general"]
 
 	v.Add(fg.Name == "general")
-	v.Add(slices.Equal(fg.Flags, []string{"-Wall", "-Wextra", "-std=c99"}))
+	v.Add(fg.Flags[0].String() == "-Wall")
+	v.Add(fg.Flags[1].String() == "-Wextra")
+	v.Add(fg.Flags[2].String() == "-std=c99")
 	v.Add(fg.FlagGroup == "")
 	v.Add(fg.FlagGroups == nil)
 	if !v.Bool {
@@ -60,7 +62,7 @@ func TestRun(t *testing.T) {
 
 	v.Add(fg.Name == "debug")
 	v.Add(slices.Equal(fg.FlagGroups, []string{"general"}))
-	v.Add(slices.Equal(fg.Flags, []string{"-g"}))
+	v.Add(fg.Flags[0].String() == "-g")
 	v.Add(fg.FlagGroup == "")
 	if !v.Bool {
 		t.Fatal("FlagGroup debug incorrectly parsed")
@@ -71,14 +73,11 @@ func TestRun(t *testing.T) {
 
 	v.Add(fg.Name == "release")
 	v.Add(fg.FlagGroup == "general")
-	v.Add(slices.Equal(fg.Flags, []string{"-O3", "-march=native", "-mtune=native"}))
+	v.Add(fg.Flags[0].String() == "-O3")
+	v.Add(fg.Flags[1].String() == "-march=native")
+	v.Add(fg.Flags[2].String() == "-mtune=native")
 	v.Add(slices.Equal(fg.FlagGroups, []string{}))
 	if !v.Bool {
 		t.Fatal("FlagGroup release incorrectly parsed")
 	}
-
-	var b Build
-
-	v.Init()
-	b = builds["debug"]
 }

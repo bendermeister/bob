@@ -39,6 +39,10 @@ func (f *Flag) UnmarshalText(text []byte) error {
 	return nil
 }
 
+func (f *Flag) String() string {
+	return f.body
+}
+
 type FlagGroup struct {
 	Name       string   `toml:"Name"`
 	Flags      []Flag   `toml:"Flags"`
